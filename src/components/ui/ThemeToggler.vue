@@ -61,11 +61,9 @@ onMounted(() => {
       <span>
         Theme
       </span>
-      <div>
-        <Sun v-if="selectedTheme === 'light'"/>
-        <Moon v-else-if="selectedTheme === 'dark'"/>
-        <Monitor v-else/>
-      </div>
+      <template v-for="({name, icon}, index) in themeItems" :key="index">
+        <component :is="icon" v-if="selectedTheme === name" />
+      </template>
     </div>
 
     <ul
