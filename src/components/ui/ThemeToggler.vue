@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, onMounted} from 'vue'
+import {ref, onMounted, computed} from 'vue'
 import {Sun, Moon, Monitor, type LucideIcon} from 'lucide-vue-next'
 
 type Theme = 'light' | 'dark';
@@ -9,11 +9,14 @@ type ThemeItem = { name: ThemeMode, icon: LucideIcon }
 const selectedTheme = ref<ThemeMode>('system')
 const currentTheme = ref<Theme>('light')
 
-const themeItems: ThemeItem[] = [
+const themeItems = ref<ThemeItem[]>([
   {name: "light", icon: Sun},
   {name: "dark", icon: Moon},
   {name: "system", icon: Monitor}
-]
+])
+
+const activeTheme = computed<ThemeItem | undefined>(() => themeItems.value.find(item => item.name === selectedTheme.value));
+
 const getSystemTheme = () => (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') as Theme;
 
 const applyTheme = (theme: ThemeMode) => {
@@ -61,9 +64,9 @@ onMounted(() => {
       <span>
         Theme
       </span>
-      <template v-for="({name, icon}, index) in themeItems" :key="index">
-        <component :is="icon" v-if="selectedTheme === name" />
-      </template>
+      <div>
+        <component :is="activeTheme.icon" v-if="activeTheme" />
+      </div>
     </div>
 
     <ul
