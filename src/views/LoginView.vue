@@ -1,71 +1,98 @@
 <script setup lang="ts">
-import { EyeIcon, EyeOffIcon } from "lucide-vue-next";
-import { ref } from "vue";
-import ShowPasswordButton from "@/components/ui/ShowPasswordButton.vue";
+import {ref} from "vue";
+import {AuthService} from "@/services/AuthService.ts";
+import FormInput from "@/components/ui/FormInput.vue";
+import type {FormInputType} from "@/types/form-input.ts";
+import type {ValidationErrorMessage} from "@/types/api-response.ts";
 
-const showPassword = ref(false);
-const email = ref("");
-const password = ref("");
-const rememberMe = ref("false");
+const isLoading = ref<boolean>(false);
+const errors = ref<ValidationErrorMessage>({});
+const hasErrors = ref<boolean>(false);
+const globalMessage = ref<string | null>(null);
+
+const inputs: FormInputType[] = [
+  {
+    type: "email",
+    kind: "email",
+    name: "email",
+    placeholder: "Enter email or username",
+  },
+  {
+    type: "password",
+    name: "password",
+    kind: "password",
+    placeholder: "Enter your password",
+  }
+]
+
+async function handleLogin(e: Event) {
+  isLoading.value = true;
+  globalMessage.value = null;
+  hasErrors.value = false;
+
+  let formField = e.target as HTMLFormElement;
+  let formData = new FormData(formField);
+  const loginService = await AuthService.login(formData);
+
+  if (loginService.hasErrors && loginService.errors) {
+    hasErrors.value = true;
+    errors.value = loginService.errors;
+  }
+
+  globalMessage.value = loginService.message;
+  isLoading.value = false;
+}
+
+const getErrorMessage = (key: string) => {
+  return errors.value[key]?.[0] || "";
+}
+
 </script>
 
 <template>
   <main
-    class="grid grid-cols-1 gap-20 md:grid-cols-2 content-center px-8 md:px-20"
+      class="grid grid-cols-1 gap-20 md:grid-cols-2 content-center px-8 md:px-20"
   >
     <div class="hidden md:flex flex-col items-center justify-center">
       <img
-        src="@/assets/images/login-illustration.png"
-        alt="Login Illustration"
-        class="object-contain"
+          src="@/assets/images/login-illustration.png"
+          alt="Login Illustration"
+          class="object-contain"
       />
       <h2 class="text-3xl font-bold text-center">
         Manage your products, stock, and pricing with ease.
       </h2>
     </div>
 
-    <!-- ------------- Main Form --------------- -->
     <div class="grid content-center gap-20 lg:w-[min(100%,_35rem)] lg:mx-auto">
       <h2 class="text-primary font-bold text-3xl sm:text-5xl">
-        HELLO👋, <br />
+        HELLO👋, <br/>
         WELCOME BACK!
       </h2>
 
-      <form class="grid gap-12">
-        <!-- Email -->
-        <input
-          v-model="email"
-          type="text"
-          placeholder="Enter your email or username"
-          class="input input-md lg:input-lg xl:input-xl w-full"
-        />
+      <form class="grid gap-12" @submit.prevent="handleLogin">
 
-        <!-- Password -->
-        <div class="relative">
-          <input
-            v-model="password"
-            :type="showPassword ? 'text' : 'password'"
-            placeholder="Enter your password"
-            class="input input-md lg:input-lg xl:input-xl w-full pr-13"
+        <template v-for="(input, _index) in inputs" :key="_index">
+          <FormInput
+              :name="input.name"
+              :kind="input.kind"
+              :type="input.type"
+              :placeholder="input.placeholder"
+              :error="getErrorMessage(input.name)"
           />
-
-          <ShowPasswordButton
-            v-model:showPassword="showPassword"
-            class="absolute right-4 top-1/2 -translate-y-1/2 z-10"
-          />
-        </div>
+        </template>
 
         <div class="grid gap-4">
           <div class="flex justify-between flex-wrap items-center gap-2">
             <label
-              class="label text-primary text-sm md:text-md -mt-0.5 font-semibold"
+                class="label text-primary text-sm md:text-md -mt-0.5 font-semibold"
             >
               <input
-                type="checkbox"
-                checked
-                class="checkbox checkbox-sm checkbox-primary"
-                v-model="rememberMe"
-                id="remember"
+                  type="checkbox"
+                  checked
+                  class="checkbox checkbox-sm checkbox-primary"
+                  name="rememberMe"
+                  id="remember"
               />
               Remember me
             </label>
@@ -75,12 +102,28 @@ const rememberMe = ref("false");
             </RouterLink>
           </div>
           <button
-            class="btn btn-md lg:btn-lg xl:btn-xl btn-primary btn-block text-white"
+              class="btn btn-md lg:btn-lg xl:btn-xl btn-primary btn-block text-white"
+              type="submit"
+              :disabled="isLoading"
           >
-            Login
+            <span v-if="isLoading">Loading...</span>
+            <span v-else>Login</span>
           </button>
         </div>
       </form>
     </div>
+
+    <div class="toast toast-top" v-if="globalMessage != null">
+      <div
+          class="alert alert-soft"
+          :class="{
+            'alert-success': hasErrors === false,
+            'alert-error': hasErrors === true,
+          }"
+      >
+        <span class="text-2xl">{{ globalMessage }} !!!</span>
+      </div>
+    </div>
+
   </main>
 </template>
