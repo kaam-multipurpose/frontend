@@ -58,12 +58,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="dropdown dropdown-start">
+  <div class="dropdown dropdown-end">
 
     <div tabindex="0" role="button" class="btn btn-primary btn-dash text-base-content">
-      <span>
-        Theme
-      </span>
+<!--      <span>-->
+<!--        Theme-->
+<!--      </span>-->
       <div>
         <component :is="activeTheme.icon" v-if="activeTheme" />
       </div>
@@ -81,7 +81,7 @@ onMounted(() => {
         >
           <component :is="icon" />
           <div class="flex-1 text-left">
-            <div class="font-medium">{{ name.charAt(0).toUpperCase()+""+name.slice(1) }}</div>
+<!--            <div class="font-medium">{{ name.charAt(0).toUpperCase()+""+name.slice(1) }}</div>-->
           </div>
           <div v-if="selectedTheme === name" class="w-2 h-2 bg-primary rounded-full"></div>
         </button>

@@ -1,9 +1,9 @@
 import type {APISuccessResponse, APIErrorResponse, ValidationErrorMessage} from "@/types/api-response.ts";
-import type {UserType} from "@/types/users.ts";
+import type {UserTypeWithPermissions} from "@/types/users.ts";
 
 export type LoginSuccessResponse = APISuccessResponse & {
     data:  {
-        user: UserType;
+        user: UserTypeWithPermissions;
         expires_at: string;
         token: string;
     };

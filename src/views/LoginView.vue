@@ -1,51 +1,14 @@
 <script setup lang="ts">
-import {ref} from "vue";
-import {AuthService} from "@/services/AuthService.ts";
 import FormInput from "@/components/ui/FormInput.vue";
 import type {FormInputType} from "@/types/form-input.ts";
-import type {ValidationErrorMessage} from "@/types/api-response.ts";
+import {loginFormInputs} from "@/config/login-form.config.ts";
+import {useValidationErrors} from "@/composables/useValidationErrors.ts";
+import {useLogin} from "@/composables/useLogin.ts";
+import AppToast from "@/components/ui/AppToast.vue";
 
-const isLoading = ref<boolean>(false);
-const errors = ref<ValidationErrorMessage>({});
-const hasErrors = ref<boolean>(false);
-const globalMessage = ref<string | null>(null);
-
-const inputs: FormInputType[] = [
-  {
-    type: "email",
-    kind: "email",
-    name: "email",
-    placeholder: "Enter email or username",
-  },
-  {
-    type: "password",
-    name: "password",
-    kind: "password",
-    placeholder: "Enter your password",
-  }
-]
-
-async function handleLogin(e: Event) {
-  isLoading.value = true;
-  globalMessage.value = null;
-  hasErrors.value = false;
-
-  let formField = e.target as HTMLFormElement;
-  let formData = new FormData(formField);
-  const loginService = await AuthService.login(formData);
-
-  if (loginService.hasErrors && loginService.errors) {
-    hasErrors.value = true;
-    errors.value = loginService.errors;
-  }
-
-  globalMessage.value = loginService.message;
-  isLoading.value = false;
-}
-
-const getErrorMessage = (key: string) => {
-  return errors.value[key]?.[0] || "";
-}
+const {isLoading, errors, hasErrors, globalMessage, handleLogin} = useLogin();
+const inputs: FormInputType[] = loginFormInputs;
+const {getErrorMessage} = useValidationErrors(errors);
 
 </script>
 
@@ -71,7 +34,6 @@ const getErrorMessage = (key: string) => {
       </h2>
 
       <form class="grid gap-12" @submit.prevent="handleLogin">
-
         <template v-for="(input, _index) in inputs" :key="_index">
           <FormInput
               :name="input.name"
@@ -106,24 +68,17 @@ const getErrorMessage = (key: string) => {
               type="submit"
               :disabled="isLoading"
           >
-            <span v-if="isLoading">Loading...</span>
-            <span v-else>Login</span>
+             <span v-if="isLoading" class="loading loading-bars loading-md lg:loading-lg">
+            </span>
+            <span v-else>
+              Logout
+            </span>
           </button>
         </div>
       </form>
     </div>
 
-    <div class="toast toast-top" v-if="globalMessage != null">
-      <div
-          class="alert alert-soft"
-          :class="{
-            'alert-success': hasErrors === false,
-            'alert-error': hasErrors === true,
-          }"
-      >
-        <span class="text-2xl">{{ globalMessage }} !!!</span>
-      </div>
-    </div>
+    <AppToast :message="globalMessage" :isError="hasErrors"/>
 
   </main>
 </template>
