@@ -4,5 +4,8 @@ export type UserType = {
     last_name: string;
     email: string;
     phone_number: string;
-    permissions: string[];
 };
+
+export type UserTypeWithPermissions = UserType & permissionsType;
+
+export type permissionsType = { permissions: string[] };
