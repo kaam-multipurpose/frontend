@@ -11,13 +11,17 @@ const store = useUserSessionStore();
 
   <div class="dropdown dropdown-end">
 
-    <div tabindex="0" role="button" class="cursor-pointer">
+    <button 
+      type="button"
+      class="btn btn-ghost btn-circle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+      tabindex="0"
+    >
       <div class="avatar avatar-placeholder">
         <div class="bg-primary text-primary-content w-8 rounded-full">
           <span class="text-xs">{{ store.initial }}</span>
         </div>
       </div>
-    </div>
+    </button>
 
     <ul tabindex="-1" class="dropdown-content  bg-base-100 rounded-box z-1 w-52 p-2 shadow-lg shadow-base-300">
       <li>
