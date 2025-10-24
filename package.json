@@ -15,6 +15,7 @@
     "type-check": "vue-tsc --build"
   },
   "dependencies": {
+    "http-status-codes": "^2.3.0",
     "lucide-vue-next": "^0.543.0",
     "pinia": "^3.0.3",
     "pinia-plugin-persistedstate": "^4.5.0",

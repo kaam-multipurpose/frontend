@@ -3,6 +3,7 @@ import type {LoginResponse, LoginResponseDto} from "@/types/login-reponse.ts";
 import {useUserSessionStore} from "@/stores/user-session-store.ts";
 import type {RefreshTokenResponse, RefreshTokenResponseDto} from "@/types/refresh-token-response.ts";
 import type {APIGlobalResponse} from "@/types/api-response.ts";
+import {ApiError} from "@/services/error/api-error.ts";
 
 export class AuthService {
 
@@ -51,6 +52,14 @@ export class AuthService {
                     credentials: "include"
                 });
         } catch (e: any) {
+            if (e instanceof ApiError) {
+                return {
+                    success: false,
+                    message: e.message,
+                    statusCode: e.statusCode,
+                }
+            }
+
             return {
                 success: false,
                 message: e.message ?? "Log out failed"

@@ -1,4 +1,5 @@
 import { useUserSessionStore } from "@/stores/user-session-store.ts";
+import {ApiError} from "@/services/error/api-error.ts";
 
 export class ApiService {
     private static apiUrl: string;
@@ -45,15 +46,41 @@ export class ApiService {
             const response = await fetch(url, options);
             return await this.handleResponse<T>(response);
         } catch (error: any) {
+            if (error instanceof ApiError) {
+                throw error;
+            }
             throw new Error("Network error: Unable to reach server.");
         }
     }
 
     private static async handleResponse<T>(response: Response): Promise<T> {
+        const responseBody = await response.text();
+
+        if (!response.ok) {
+            let jsonError: any = { message: "Server error" };
+            try {
+               jsonError = JSON.parse(responseBody);
+            } catch {
+                jsonError.message = response.statusText;
+            }
+
+            throw new ApiError(
+                jsonError.message || response.statusText,
+                response.status,
+                jsonError
+            );
+        }
+
+        let data: T;
         try {
-            return await response.json() as T;
+            if (response.status === 204 || responseBody.length === 0) {
+                data = {} as T;
+            } else {
+                data = JSON.parse(responseBody) as T;
+            }
+            return {...data, statusCode: response.status} as T;
         } catch (e: any) {
-            throw new Error(e.message || `Invalid response format`);
+            throw new Error("Invalid response format: " + e.message);
         }
     }
 

@@ -1,5 +1,6 @@
 type APIResponse = {
     message: string;
+    statusCode?: number;
 };
 
 type APISuccess = {

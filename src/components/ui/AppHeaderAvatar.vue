@@ -42,7 +42,7 @@ const store = useUserSessionStore();
       <ul class="menu w-full">
         <li><RouterLink to="/"><User />Profile</RouterLink></li>
         <li>
-          <LogoutModalToggler class="text-sm" />
+          <LogoutModalToggler />
         </li>
       </ul>
     </ul>
