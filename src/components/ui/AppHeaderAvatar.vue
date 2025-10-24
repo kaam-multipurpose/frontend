@@ -23,7 +23,7 @@ const store = useUserSessionStore();
       <li>
         <div class="flex items-center gap-2 justify-end">
           <div class="avatar avatar-placeholder">
-            <div class="bg-primary text-primary-content w-16 rounded-full">
+            <div class="bg-primary text-primary-content w-12 rounded-full">
               <span class="text-sm">{{ store.initial }}</span>
             </div>
           </div>
