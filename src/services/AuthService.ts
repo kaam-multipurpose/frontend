@@ -1,6 +1,6 @@
 import {ApiService} from "@/services/ApiService.ts";
 import type {LoginResponse, LoginResponseDto} from "@/types/login-reponse.ts";
-import {useUserSessionStore} from "@/stores/user-session.ts";
+import {useUserSessionStore} from "@/stores/user-session-store.ts";
 import type {RefreshTokenResponse, RefreshTokenResponseDto} from "@/types/refresh-token-response.ts";
 import type {APIGlobalResponse} from "@/types/api-response.ts";
 

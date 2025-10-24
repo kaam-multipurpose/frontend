@@ -1,5 +1,5 @@
 import type {NavigationGuardNext, RouteLocationNormalized} from "vue-router";
-import {useUserSessionStore} from "@/stores/user-session.ts";
+import {useUserSessionStore} from "@/stores/user-session-store.ts";
 
 export function authGuard( to:RouteLocationNormalized, from:RouteLocationNormalized, next:NavigationGuardNext  ) {
 

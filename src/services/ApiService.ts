@@ -1,4 +1,4 @@
-import { useUserSessionStore } from "@/stores/user-session.ts";
+import { useUserSessionStore } from "@/stores/user-session-store.ts";
 
 export class ApiService {
     private static apiUrl: string;

@@ -1,6 +1,6 @@
 import {ref} from "vue";
 import {AuthService} from "@/services/AuthService.ts";
-import {useUserSessionStore} from "@/stores/user-session.ts";
+import {useUserSessionStore} from "@/stores/user-session-store.ts";
 import {useRouter} from "vue-router";
 
 export function useLogout() {

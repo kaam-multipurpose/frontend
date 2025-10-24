@@ -60,7 +60,7 @@ onMounted(() => {
 <template>
   <div class="dropdown dropdown-end">
 
-    <div tabindex="0" role="button" class="btn btn-primary btn-dash text-base-content">
+    <div tabindex="0" role="button" class="btn btn-dash !p-0 h-auto text-base-content">
 <!--      <span>-->
 <!--        Theme-->
 <!--      </span>-->
@@ -70,7 +70,7 @@ onMounted(() => {
     </div>
 
     <ul
-        tabindex="0"
+        tabindex="-1"
         class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-2xl border border-base-300 w-max"
     >
       <li v-for="({name, icon}, index) in themeItems" :key="index">

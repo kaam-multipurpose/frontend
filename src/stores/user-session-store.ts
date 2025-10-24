@@ -15,6 +15,13 @@ export const useUserSessionStore = defineStore('sessionStore', () => {
         return expiresAt.value && Date.now() < new Date(expiresAt.value).getTime();
     });
 
+
+    const initial = computed(() => {
+        const first = user.value?.first_name?.[0] ?? '';
+        const last = user.value?.last_name?.[0] ?? '';
+        return first + last;
+    });
+
     function setUser(newUser: UserType, newPermissions: string[]) {
         user.value = newUser;
         permissions.value = newPermissions;
@@ -64,6 +71,7 @@ export const useUserSessionStore = defineStore('sessionStore', () => {
         isAuthenticated,
         permissions,
         expiresAt,
+        initial,
         setUser,
         setToken,
         logout,
