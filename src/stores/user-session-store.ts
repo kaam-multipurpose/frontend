@@ -7,12 +7,19 @@ export const useUserSessionStore = defineStore('sessionStore', () => {
     const token = ref<string | null>(null)
     const user = ref<UserType | null>(null)
     const expiresAt = ref<string | null>(null)
-    const permissions = ref<string[]>([]);
+    const permissions = ref<string[]>(null);
     let refreshTimer: ReturnType<typeof setTimeout> | null = null;
 
 
     const isAuthenticated = computed(() => {
         return expiresAt.value && Date.now() < new Date(expiresAt.value).getTime();
+    });
+
+
+    const initial = computed(() => {
+        const first = user.value?.first_name?.[0] ?? '';
+        const last = user.value?.last_name?.[0] ?? '';
+        return first + last;
     });
 
     function setUser(newUser: UserType, newPermissions: string[]) {
@@ -32,7 +39,7 @@ export const useUserSessionStore = defineStore('sessionStore', () => {
         token.value = null;
         user.value = null;
         expiresAt.value = null;
-        permissions.value = [];
+        permissions.value = null;
     }
 
     function scheduleRefresh() {
@@ -64,6 +71,7 @@ export const useUserSessionStore = defineStore('sessionStore', () => {
         isAuthenticated,
         permissions,
         expiresAt,
+        initial,
         setUser,
         setToken,
         logout,

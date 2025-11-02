@@ -60,17 +60,17 @@ onMounted(() => {
 <template>
   <div class="dropdown dropdown-end">
 
-    <div tabindex="0" role="button" class="btn btn-primary btn-dash text-base-content">
-<!--      <span>-->
-<!--        Theme-->
-<!--      </span>-->
+    <div tabindex="0" role="button" class="btn btn-primary btn-outline text-base-content">
+      <span class="hidden md:block">
+        Theme
+      </span>
       <div>
         <component :is="activeTheme.icon" v-if="activeTheme" />
       </div>
     </div>
 
     <ul
-        tabindex="0"
+        tabindex="-1"
         class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-2xl border border-base-300 w-max"
     >
       <li v-for="({name, icon}, index) in themeItems" :key="index">
@@ -81,7 +81,7 @@ onMounted(() => {
         >
           <component :is="icon" />
           <div class="flex-1 text-left">
-<!--            <div class="font-medium">{{ name.charAt(0).toUpperCase()+""+name.slice(1) }}</div>-->
+            <div class="font-medium">{{ name.charAt(0).toUpperCase()+""+name.slice(1) }}</div>
           </div>
           <div v-if="selectedTheme === name" class="w-2 h-2 bg-primary rounded-full"></div>
         </button>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {RouterView, useRouter} from 'vue-router'
-import {useUserSessionStore} from "@/stores/user-session.ts";
+import {useUserSessionStore} from "@/stores/user-session-store.ts";
 import {onMounted} from "vue";
 
 const router = useRouter()

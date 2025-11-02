@@ -1,15 +1,9 @@
 <script setup lang="ts">
 import LogoutButton from "@/components/ui/LogoutButton.vue";
 
-function showModal() {
-  let modal = document.getElementById('logoutModal') as HTMLDialogElement;
-  modal.showModal();
-}
 </script>
 
 <template>
-  <button class="btn btn-error btn-md lg:btn-lg" @click="showModal">Logout</button>
-
   <dialog id="logoutModal" class="modal">
 
     <div class="modal-box">
@@ -18,10 +12,10 @@ function showModal() {
 
       <div class="modal-action">
         <form method="dialog">
-          <button class="btn">Close</button>
+          <button class="btn">Cancel</button>
         </form>
 
-        <LogoutButton />
+        <LogoutButton/>
       </div>
     </div>
 
