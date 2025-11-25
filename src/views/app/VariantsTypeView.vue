@@ -101,7 +101,7 @@ const rowsPerPageOptions = [5, 10, 15, 20, 25, 30, 50];
             </div>
         </div>
 
-        <div class="flex flex-col items-center justify-center gap-4">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 auto-rows-max">
             <VariantsSkeleton v-if="loading" :count="perPage" />
             <VariantTypeList v-else v-for="variant in variants" :key="variant.id" v-bind="variant"
                 @variantChanged="variantChanged = !variantChanged" />

@@ -2,14 +2,13 @@
 import { ref } from "vue";
 import FormInput from "../ui/FormInput.vue";
 import { VariantsTypeService } from "@/services/VariantsTypeService";
-import AppToast from "../ui/AppToast.vue";
+import { toast } from "vue-sonner";
+
 
 const variantTypeName = ref<string>("");
 const variantValueInput = ref<string>("");
 const variantValuesArray = ref<string[]>([]);
 const isLoading = ref<boolean>(false)
-const toastMessage = ref<string>("")
-const failedToAdd = ref<boolean>(false)
 
 const emit = defineEmits<{ variantChanged: [] }>();
 
@@ -38,8 +37,7 @@ const submitVariant = async (e: Event) => {
     const formElement = e.target as HTMLFormElement;
     if (variantValuesArray.value.length === 0) {
         isLoading.value = false;
-        toastMessage.value = "Please add at least one variant value"
-        failedToAdd.value = true
+        toast.error("Please add at least one variant value")
         return;
     }
     const variantData = {
@@ -53,12 +51,12 @@ const submitVariant = async (e: Event) => {
     console.log(addVariant);
     if (addVariant[0].success) {
         isLoading.value = false;
-        toastMessage.value = "Variant Type Added Successfully"
+        toast.success("Variant Type Added Successfully")
         modal.close();
         emit('variantChanged');
     } else {
         isLoading.value = false;
-        toastMessage.value = "Error Adding Variant Type"
+        toast.error("Error Adding Variant Type")
     }
 };
 </script>
@@ -117,7 +115,6 @@ const submitVariant = async (e: Event) => {
             <button>Close</button>
         </form>
     </dialog>
-    <AppToast :message="toastMessage" :isError="failedToAdd" />
 </template>
 
 <style scoped>

@@ -4,11 +4,22 @@ import type { FormInputType } from "@/types/form-input.ts";
 import { loginFormInputs } from "@/config/login-form.config.ts";
 import { useValidationErrors } from "@/composables/useValidationErrors.ts";
 import { useLogin } from "@/composables/useLogin.ts";
-import AppToast from "@/components/ui/AppToast.vue";
+import { toast } from "vue-sonner";
+import { watch } from "vue";
 
 const { isLoading, errors, hasErrors, globalMessage, handleLogin } = useLogin();
 const inputs: FormInputType[] = loginFormInputs;
 const { getErrorMessage } = useValidationErrors(errors);
+
+watch([globalMessage, hasErrors], () => {
+  if (!globalMessage.value) return;
+
+  if (hasErrors.value) {
+    toast.error(globalMessage.value);
+  } else {
+    toast.success(globalMessage.value);
+  }
+});
 </script>
 
 <template>
@@ -53,7 +64,5 @@ const { getErrorMessage } = useValidationErrors(errors);
         </div>
       </form>
     </div>
-
-    <AppToast :message="globalMessage" :isError="hasErrors" />
   </main>
 </template>

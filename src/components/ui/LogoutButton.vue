@@ -1,10 +1,19 @@
 <script setup lang="ts">
 
-import {useLogout} from "@/composables/useLogout.ts";
-import AppToast from "@/components/ui/AppToast.vue";
+import { useLogout } from "@/composables/useLogout.ts";
+import { watch } from "vue";
+import { toast } from "vue-sonner";
 
-const {handleLogout, hasError, message, isLoading} = useLogout();
+const { handleLogout, hasError, message, isLoading } = useLogout();
+watch([message, hasError], () => {
+  if (!message.value) return;
 
+  if (hasError.value) {
+    toast.error(message.value);
+  } else {
+    toast.success(message.value);
+  }
+});
 </script>
 
 <template>
@@ -16,7 +25,5 @@ const {handleLogout, hasError, message, isLoading} = useLogout();
       Logout
     </span>
   </button>
-
-  <AppToast :message="message" :isError="hasError"/>
 
 </template>

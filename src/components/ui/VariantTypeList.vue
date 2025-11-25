@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { CheckCircle2Icon, ChevronDown, CircleAlertIcon, Edit2Icon, PlusCircleIcon, Trash2Icon, TrendingUpDown, XIcon } from 'lucide-vue-next';
 import type { VariantTypeItem } from '@/types/variant-type-response';
 import { VariantsTypeService } from '@/services/VariantsTypeService';
+import { toast } from 'vue-sonner';
 
 const { name, slug, id, values } = defineProps<VariantTypeItem>();
 const emit = defineEmits<{ variantChanged: [] }>();
@@ -13,9 +14,6 @@ const variantValueInput = ref<string>("");
 const variantValuesArray = ref<string[]>([]);
 
 const deleteVariantModal = ref<HTMLDialogElement | null>(null);
-
-console.log(deleteVariantModal);
-
 
 const addVariantValue = () => {
     const trimmed = variantValueInput.value.trim();
@@ -43,14 +41,16 @@ const toggleAccordion = () => {
 const toggleAddVariant = () => {
     addNewVariantTypeValue.value = !addNewVariantTypeValue.value
 }
+
 const saveNewVariantValues = async () => {
     isLoading.value = true;
     const addVariantValue = await VariantsTypeService.addValueToVariantType(slug, variantValuesArray.value);
     if (addVariantValue[0].success) {
         isLoading.value = false;
+        toast.success("Variant Values Added Successfully")
+        variantValuesArray.value = [];
+        addNewVariantTypeValue.value = false;
         emit('variantChanged');
-    } else {
-
     }
 }
 
@@ -58,14 +58,15 @@ const handleDeleteVariantType = async () => {
     isLoading.value = true;
     const res = await VariantsTypeService.deleteVariantType(slug);
     isLoading.value = false;
+    toast.success("Variant Type Deleted Successfully")
     emit('variantChanged');
 };
-
 
 const handleDeleteValue = async (valueSlug: string) => {
     isLoading.value = true;
     const removeVariantValue = await VariantsTypeService.deleteValueFromVariantType(slug, valueSlug)
     isLoading.value = false;
+    toast.success("Variant Type Value Deleted Successfully")
     emit('variantChanged');
 }
 
@@ -76,11 +77,11 @@ const handlePlusCLick = () => {
         toggleAddVariant()
     }
 }
-
 </script>
 
 <template>
-    <div class="relative group w-full">
+    <!-- Responsive card width: full on mobile, half on large screens when closed, full when open -->
+    <div class="relative group w-full" :class="{ 'lg:col-span-2': isOpen }">
         <div class="relative collapse bg-base-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-base-300"
             :class="{ 'collapse-open': isOpen }">
 
@@ -115,25 +116,25 @@ const handlePlusCLick = () => {
             <div class="collapse-content" v-show="isOpen">
                 <div class="w-full h-px bg-gradient-to-r from-transparent via-base-300 to-transparent mb-4"></div>
 
-                <div class="flex flex-wrap gap-6 pb-2">
+                <!-- Changed: Better responsive grid layout that works with many items -->
+                <div class="flex flex-wrap gap-3 pb-2">
                     <div v-for="value in values" :key="value.id"
-                        class="flex items-center gap-2 px-3 py-1 bg-base-200 border border-base-300 rounded-full hover:border-primary hover:bg-primary/10 transition">
-                        <span class="text-md font-medium text-base-content/80">
+                        class="flex items-center gap-2 px-3 py-1.5 bg-base-200 border border-base-300 rounded-full hover:border-primary hover:bg-primary/10 transition group/item">
+                        <span class="text-sm font-medium text-base-content/80">
                             {{ value.name }}
                         </span>
-                        <div class="flex items-center gap-1 transition-opacity">
+                        <div class="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
                             <button @click="" class="hover:text-primary">
-                                <Edit2Icon class="w-4 h-4" />
+                                <Edit2Icon class="w-3.5 h-3.5" />
                             </button>
                             <button @click="handleDeleteValue(value.slug)" class="hover:text-red-500 cursor-pointer">
-                                <Trash2Icon class="w-4 h-4" />
+                                <Trash2Icon class="w-3.5 h-3.5" />
                             </button>
                         </div>
                     </div>
 
-
                     <!-- Variant Values Input -->
-                    <div v-if="addNewVariantTypeValue">
+                    <div v-if="addNewVariantTypeValue" class="w-full md:w-auto md:min-w-[300px]">
                         <div
                             class="flex flex-wrap items-center gap-2 p-2 border rounded-lg focus-within:ring-2 ring-primary/50">
                             <!-- Pills -->
@@ -149,21 +150,21 @@ const handlePlusCLick = () => {
 
                             <!-- Input -->
                             <input v-model="variantValueInput" @keydown="handleKeydown" type="text"
-                                class="flex-1 outline-none p-1 bg-transparent text-sm"
+                                class="flex-1 min-w-[200px] outline-none p-1 bg-transparent text-sm"
                                 placeholder="Type and press Enter, Tab or comma" />
                         </div>
                     </div>
 
                     <button @click="handlePlusCLick"
-                        class="w-11 h-11 rounded-lg cursor-pointer bg-primary/35 flex items-center justify-center transition-all duration-300 disabled:opacity-20"
+                        class="w-10 h-10 rounded-lg cursor-pointer bg-primary/35 flex items-center justify-center transition-all duration-300 disabled:opacity-20 hover:bg-primary/50"
                         :disabled="isLoading">
-                        <span v-if="isLoading" class="loading loading-bars loading-md lg:loading-lg">
+                        <span v-if="isLoading" class="loading loading-bars loading-sm">
                         </span>
-                        <CheckCircle2Icon class="w-7 h-7 transition-all duration-300 text-base-content/70"
+                        <CheckCircle2Icon class="w-5 h-5 transition-all duration-300 text-base-content/70"
                             v-else-if="addNewVariantTypeValue && variantValuesArray.length > 0" />
-                        <XIcon class="w-7 h-7 transition-all duration-300 text-base-content/70"
+                        <XIcon class="w-5 h-5 transition-all duration-300 text-base-content/70"
                             v-else-if="addNewVariantTypeValue" />
-                        <PlusCircleIcon class="w-7 h-7 transition-all duration-300 text-base-content/70" v-else />
+                        <PlusCircleIcon class="w-5 h-5 transition-all duration-300 text-base-content/70" v-else />
                     </button>
                 </div>
             </div>
@@ -173,7 +174,7 @@ const handlePlusCLick = () => {
     <dialog ref="deleteVariantModal" id="deleteVariantModal" class="modal">
         <div class="modal-box w-full max-w-lg">
             <CircleAlertIcon class="w-12 h-12 text-red-600 mx-auto mb-4" />
-            <h2 class="text-lg font-semibold uppercase mb-4 text-center">Are you sure you want to delete {{ name }}??
+            <h2 class="text-lg font-semibold uppercase mb-4 text-center">Are you sure you want to delete {{ name }}?
             </h2>
             <!-- Actions -->
             <div class="modal-action mt-6 flex justify-end gap-3">
@@ -181,7 +182,7 @@ const handlePlusCLick = () => {
                     <button class="btn btn-outline">Cancel</button>
                 </form>
                 <button type="button" @click="handleDeleteVariantType" class="btn btn-primary" :disabled="isLoading">
-                    <span v-if="isLoading" class="loading loading-bars loading-md lg:loading-lg">
+                    <span v-if="isLoading" class="loading loading-bars loading-md">
                     </span>
                     <span v-else>
                         Delete Variant Type
@@ -195,7 +196,6 @@ const handlePlusCLick = () => {
             <button>Close</button>
         </form>
     </dialog>
-
 </template>
 
 <style scoped>
