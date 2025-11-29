@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type {SidebarMenuConfigType} from "@/config/sidebar-menu.config.ts";
-
-const {name, icon, path, hasSubMenu, subMenu} = defineProps<SidebarMenuConfigType>();
+import type { SidebarMenuConfigType } from "@/config/sidebar-menu.config.ts";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const { name, icon, path, hasSubMenu, subMenu } = defineProps<SidebarMenuConfigType>();
 </script>
 
 <template>
@@ -12,23 +13,17 @@ const {name, icon, path, hasSubMenu, subMenu} = defineProps<SidebarMenuConfigTyp
         {{ name }}
       </summary>
       <ul>
-        <AppSidebarMenuList
-            v-for="(item, index) in subMenu"
-            :key="index"
-            v-bind="item"
-        />
+        <AppSidebarMenuList v-for="(item, index) in subMenu" :key="index" v-bind="item" />
       </ul>
     </details>
   </li>
 
   <li v-else>
-    <RouterLink :to="path ||''" :class="{'menu-active': name==='Dashboard'}">
+    <RouterLink :to="path || ''" :class="{ 'menu-active': route.path === path }">
       <component :is="icon" />
       {{ name }}
     </RouterLink>
   </li>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
