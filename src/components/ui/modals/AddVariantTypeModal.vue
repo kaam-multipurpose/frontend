@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import FormInput from "../ui/FormInput.vue";
-import { VariantsTypeService } from "@/services/VariantsTypeService";
+import FormInput from "../FormInput.vue";
+import { VariantsTypeService } from "@/services/VariantsTypeService.ts";
 import { toast } from "vue-sonner";
 
 

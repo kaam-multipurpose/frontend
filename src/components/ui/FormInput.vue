@@ -42,7 +42,7 @@ const convertType = computed<string>(() => {
 
     <div class="relative w-full">
       <input :type="convertType" :name="name" :placeholder="placeholder"
-        class="input input-md lg:input-lg xl:input-xl w-full" :class="inputClasses" :value="modelValue" />
+        class="input input-md lg:input-lg w-full" :class="inputClasses" :value="modelValue" />
 
       <div v-if="kind === 'password'" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 px-4">
         <ShowPasswordButton v-if="kind === 'password'" v-model:showPassword="showPassword" />

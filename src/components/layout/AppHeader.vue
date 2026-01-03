@@ -3,7 +3,7 @@
 import ThemeToggler from "@/components/ui/ThemeToggler.vue";
 import { Menu, Settings, Bell, User } from "lucide-vue-next";
 import { useSidebarStateStore } from "@/stores/sidebar-state-store.ts";
-import LogoutModal from "@/components/layout/LogoutModal.vue";
+import LogoutModal from "@/components/ui/modals/LogoutModal.vue";
 import AppHeaderAvatar from "@/components/ui/AppHeaderAvatar.vue";
 
 const sidebarStore = useSidebarStateStore();
@@ -11,7 +11,7 @@ const { open } = sidebarStore;
 </script>
 
 <template>
-  <header class="sticky top-0 bg-base-100 p-4 flex z-20 justify-between items-center gap-4">
+  <header class="sticky top-0 bg-base-100 p-4  flex z-20 justify-between items-center gap-4 border-b border-gray-200/5">
     <button class="btn btn-circle btn-primary hover:text-white transition duration-200 md:hidden"
       aria-label="Toggle Menu" @click="open">
       <Menu class="w-5 h-5" />

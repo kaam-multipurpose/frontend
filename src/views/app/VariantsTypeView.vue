@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AddVariantModal from '@/components/layout/AddVariantTypeModal.vue';
+import AddVariantModal from '@/components/ui/modals/AddVariantTypeModal.vue';
 import AppPagination from '@/components/ui/AppPagination.vue';
 import VariantsSkeleton from '@/components/ui/preloaders/VariantsSkeleton.vue';
 import VariantTypeList from '@/components/ui/VariantTypeList.vue';
@@ -8,12 +8,12 @@ import type { VariantTypeResponseDto } from '@/types/variant-type-response';
 import { PlusCircle } from 'lucide-vue-next';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { rowsPerPageOptions } from '@/config/pagination.config';
 
 const route = useRoute();
 const router = useRouter();
 
 const perPage = ref(Number(route.query.perPage) || 10);
-const row = ref(Number(route.query.row) || 4);
 const page = ref(Number(route.query.page) || 1);
 
 const variants = ref<any[]>([]);
@@ -40,7 +40,6 @@ watch(
     async ([query, variantChanged]) => {
         page.value = Number(query.page) || 1;
         perPage.value = Number(query.perPage) || 10;
-        row.value = Number(query.row) || 4;
         await fetchVariants();
     },
     { deep: true }
@@ -59,8 +58,6 @@ const goToPage = (newPage: number) => {
         },
     });
 };
-
-const rowsPerPageOptions = [5, 10, 15, 20, 25, 30, 50];
 </script>
 
 <template>

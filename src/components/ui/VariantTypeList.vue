@@ -205,7 +205,7 @@ const handlePlusCLick = () => {
 
 .collapse-content {
     scrollbar-width: thin;
-    scrollbar-color: oklch(var(--p) / 0.3) transparent;
+    scrollbar-color: oklch(var(--color-primary) / 0.3) transparent;
 }
 
 .collapse-content::-webkit-scrollbar {

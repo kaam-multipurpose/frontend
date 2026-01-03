@@ -36,7 +36,7 @@ export const sidebarMenuConfig: SidebarMenuConfigType[] = [
   {
     name: "Categories",
     icon: Boxes,
-    path: "",
+    path: "/app/categories",
   },
   {
     name: "Products",
