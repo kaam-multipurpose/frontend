@@ -27,7 +27,7 @@ export function useLogin() {
             router.push({name: "Dashboard"});
         }
 
-        globalMessage.value = loginService.message;
+        globalMessage.value = (loginService?.errors?.global) ? loginService?.errors?.global[0] : loginService.message;
         isLoading.value = false;
     }
 

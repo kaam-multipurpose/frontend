@@ -18,7 +18,7 @@ const addToggleClass = computed(() => {
 
 <template>
   <aside
-      class="fixed z-10 grid bg-base-300 h-[100dvh] w-[100%] translate-x-[-100%] md:!translate-x-[0] md:sticky md:top-0 md:w-[20em] cursor-pointer transition"
+      class="fixed z-25 grid bg-base-300 h-[100dvh] w-[100%] translate-x-[-100%] md:!translate-x-[0] md:sticky md:top-0 md:w-[20em] cursor-pointer transition"
       :class="addToggleClass"
       @click="close"
   >

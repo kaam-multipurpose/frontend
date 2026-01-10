@@ -2,6 +2,7 @@ import AppLayout from "@/layouts/AppLayout.vue";
 import DashboardView from "@/views/app/DashboardView.vue";
 import VariantsView from "@/views/app/VariantsTypeView.vue";
 import type { RouteRecordRaw } from "vue-router";
+import UnitView from "@/views/app/UnitView.vue";
 
 export const appRouter: RouteRecordRaw = {
   path: "/app",
@@ -24,5 +25,13 @@ export const appRouter: RouteRecordRaw = {
         requiresAuth: true,
       },
     },
+    {
+      path: "units",
+      name: "Units",
+      component: UnitView,
+      meta: {
+        requiresAuth: true,
+      },
+    }
   ],
 };

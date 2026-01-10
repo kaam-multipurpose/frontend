@@ -18,3 +18,8 @@ dialog::backdrop {
 dialog {
     z-index: 61 !important;
 }
+
+
+.main-container {
+    @apply p-4 px-6 md:px-12;
+}

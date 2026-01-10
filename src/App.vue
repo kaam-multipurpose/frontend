@@ -21,7 +21,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <RouterView />
+  <div id="app">
+    <RouterView />
+  </div>
   <Toaster position="top-right" :toast-options="{ duration: 4000 }" rich-colors close-button theme="system" expand
     class="toast-container" />
 </template>
