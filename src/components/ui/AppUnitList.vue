@@ -18,6 +18,10 @@ const setCurrenUnitValue = () => {
   currentUnitValue.value = temp;
 }
 
+const showContent = () => {
+  setCurrenUnitValue();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 </script>
 
 <template>
@@ -38,7 +42,7 @@ const setCurrenUnitValue = () => {
         Qty: {{ calculatedQty }}
       </p>
       <div class="flex gap-2">
-        <button class="btn btn-square btn-ghost" @click="setCurrenUnitValue">
+        <button class="btn btn-square btn-ghost" @click="showContent">
           <Edit class="w-5 h-5 text-primary-700"/>
         </button>
         <button class="btn btn-square btn-ghost">
