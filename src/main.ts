@@ -15,4 +15,4 @@ app.use(pinia);
 app.use(router);
 import "vue-sonner/style.css";
 
-app.mount("#app");
+app.mount("#root");

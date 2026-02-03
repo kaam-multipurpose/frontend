@@ -14,9 +14,9 @@ const hiddenToggle = computed(() => store.isSidebarOpen ? 'overflow-hidden' : ''
 <template>
   <main class="md:grid md:grid-cols-[auto_1fr] md:!overflow-y-auto" :class="hiddenToggle">
     <AppSidebar />
-    <div class="main" >
+    <div class="main grid grid-rows-[auto_1fr] h-screen">
      <AppHeader />
-      <div class="view">
+      <div class="view h-[100%] grid">
         <RouterView/>
       </div>
     </div>
