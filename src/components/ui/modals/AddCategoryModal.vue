@@ -8,16 +8,40 @@ import FormInput from "@/components/ui/FormInput.vue";
 import { CategoryService } from "@/services/CategoryService";
 import { toast } from "vue-sonner";
 
-const variants = ref<any[]>([]);
-const selectedVariants = ref<any[]>([]);
 const search = ref("");
 const inputs: FormInputType[] = addCategoryFormConfig;
+const variants = ref<any[]>([]);
 const perPage = ref(20);
 const page = ref(1);
 const loading = ref(false);
 const dropdownOpen = ref(false);
 
+const {
+  categoryId,
+  categoryName,
+  variantsId,
+  editModal = false
+} = defineProps<{
+  categoryId?: number | null;
+  categoryName?: string;
+  variantsId?: number[];
+  editModal?: boolean;
+}>();
+const selectedVariants = ref<any[]>([]);
+
+watch(
+  [() => variants.value, () => variantsId],
+  ([allVariants, ids]) => {
+    if (!ids?.length) return;
+    selectedVariants.value = allVariants.filter(v => ids.includes(v.id));
+  },
+  { immediate: true }
+);
+
+const categoryNameRef = ref<string>(categoryName || "");
+
 const emit = defineEmits<{ categoryChanged: [] }>();
+
 
 const fetchVariants = async (reset = false) => {
   if (loading.value) return;
@@ -41,6 +65,15 @@ const fetchVariants = async (reset = false) => {
   loading.value = false;
 };
 
+watch(
+  () => categoryName,
+  (val) => {
+    categoryNameRef.value = val || "";
+  },
+  { immediate: true }
+);
+
+
 const submitForm = async (e: Event) => {
   const formdata = e.target as HTMLFormElement;
   const categoryData = {
@@ -53,7 +86,7 @@ const submitForm = async (e: Event) => {
   loading.value = true;
   const addCategory = await CategoryService.create(categoryData.name, categoryData.variant_type_ids);
 
-  if (addCategory[0].success) {
+  if (addCategory.success) {
     loading.value = false;
     toast.success("Category Added Successfully")
     modal.close();
@@ -92,7 +125,7 @@ onMounted(fetchVariants);
       <form @submit.prevent="submitForm">
         <template v-for="(input, _index) in inputs" :key="_index">
           <FormInput v-if="input.kind !== 'dropdown'" :kind="input.kind" :name="input.name"
-            :placeholder="input.placeholder" :type="input.type" class="mb-3" />
+            :placeholder="input.placeholder" :type="input.type" class="mb-3" :model-value="categoryNameRef" />
           <div v-else class="form-control w-full">
             <label class="label">
               <span class="label-text">Variant Types</span>
@@ -156,7 +189,7 @@ onMounted(fetchVariants);
             <span v-if="loading" class="loading loading-bars loading-md lg:loading-lg">
             </span>
             <span v-else>
-              Add Category
+              {{ editModal ? "Save" : "Add Category" }}
             </span>
           </button>
         </div>

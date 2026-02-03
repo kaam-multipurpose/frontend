@@ -1,5 +1,6 @@
 import type { Ref } from "vue";
 import type { APIErrorResponse, APISuccessResponse } from "./api-response";
+import type { VariantTypeItem } from "./variant-type-response";
 
 export type CategoryItem = {
   id: number;
@@ -7,6 +8,11 @@ export type CategoryItem = {
   slug: string;
   variant_type_count: number;
   sub_category_count: number;
+  variant_types?: VariantTypeItem[];
+  sub_categories?: SubcategoryItem[];
+};
+type SubcategoryItem = CategoryItem & {
+  parent_category: string;
 };
 
 export type CategoryPaginationMeta = {
@@ -51,4 +57,4 @@ export type CategoryResponseDto = {
   meta?: CategoryPaginationMeta;
   links?: CategoryPaginationLinks;
   errors?: any;
-}[];
+};

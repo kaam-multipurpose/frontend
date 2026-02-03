@@ -15,26 +15,52 @@ export class CategoryService {
         variant_type_ids,
       });
       if (response.success) {
-        return [
-          {
-            success: true,
-            message: response.message,
-          },
-        ];
+        return {
+          success: true,
+          message: response.message,
+        };
       }
-      return [
-        {
-          success: false,
-          message: response.message ?? "Failed to create category",
-        },
-      ];
+      return {
+        success: false,
+        message: response.message ?? "Failed to create category",
+      };
     } catch (e: any) {
-      return [
+      return {
+        success: false,
+        message: e.message ?? "Failed to create category",
+      };
+    }
+  }
+  public static async addSubcategory(
+    name: string,
+    variant_type_ids: number[],
+    categorySlug?: string,
+    hasAdditionalVariants?: boolean
+  ): Promise<CategoryResponseDto> {
+    try {
+      const response = await ApiService.post<CategoryResponse>(
+        `/categories/${categorySlug}`,
         {
-          success: false,
-          message: e.message ?? "Failed to create category",
-        },
-      ];
+          name,
+          variant_type_ids,
+          has_additional_variant_type: hasAdditionalVariants,
+        }
+      );
+      if (response.success) {
+        return {
+          success: true,
+          message: response.message,
+        };
+      }
+      return {
+        success: false,
+        message: response.message ?? "Failed to create subcategory",
+      };
+    } catch (e: any) {
+      return {
+        success: false,
+        message: e.message ?? "Failed to create subcategory",
+      };
     }
   }
   public static async getCategories(
@@ -49,29 +75,51 @@ export class CategoryService {
         }
       );
       if (categories.success) {
-        return [
-          {
-            success: true,
-            message: categories.message,
-            data: categories.data.data,
-            links: categories.data.links,
-            meta: categories.data.meta,
-          },
-        ];
+        return {
+          success: true,
+          message: categories.message,
+          data: categories.data.data,
+          links: categories.data.links,
+          meta: categories.data.meta,
+        };
       }
-      return [
-        {
-          success: false,
-          message: categories.message ?? "Failed to get categories",
-        },
-      ];
+      return {
+        success: false,
+        message: categories.message ?? "Failed to get categories",
+      };
     } catch (e: any) {
-      return [
+      return {
+        success: false,
+        message: e.message ?? "Failed to get categories",
+      };
+    }
+  }
+  public static async getCategory(slug: string): Promise<CategoryResponseDto> {
+    try {
+      const categories = await ApiService.get<CategoryResponse>(
+        `/categories/${slug}`,
         {
-          success: false,
-          message: e.message ?? "Failed to get categories",
-        },
-      ];
+          credentials: "include",
+        }
+      );
+      if (categories.success) {
+        return {
+          success: true,
+          message: categories.message,
+          data: categories.data,
+          links: categories.data.links,
+          meta: categories.data.meta,
+        };
+      }
+      return {
+        success: false,
+        message: categories.message ?? "Failed to get category",
+      };
+    } catch (e: any) {
+      return {
+        success: false,
+        message: e.message ?? "Failed to get category",
+      };
     }
   }
 }

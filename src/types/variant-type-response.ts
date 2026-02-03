@@ -10,6 +10,7 @@ export type VariantTypeItem = {
     name: string;
     slug: string;
   }[];
+  viewOnly?: boolean;
 };
 
 export type VariantTypePaginationMeta = {

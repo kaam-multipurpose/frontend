@@ -14,3 +14,17 @@ export const addCategoryFormConfig: FormInputType[] = [
     placeholder: "Variant Type",
   },
 ];
+export const addSubcategoryFormConfig: FormInputType[] = [
+  {
+    type: "text",
+    name: "category_name",
+    kind: "text",
+    placeholder: "Subcategory Name",
+  },
+  {
+    type: "dropdown",
+    name: "variant_type_ids",
+    kind: "dropdown",
+    placeholder: "Variant Type",
+  },
+];

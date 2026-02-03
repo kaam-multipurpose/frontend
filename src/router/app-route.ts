@@ -3,6 +3,7 @@ import DashboardView from "@/views/app/DashboardView.vue";
 import VariantsView from "@/views/app/VariantsTypeView.vue";
 import type { RouteRecordRaw } from "vue-router";
 import CategoriesView from "@/views/app/CategoriesView.vue";
+import CategoryDetails from "@/views/app/CategoryDetails.vue";
 
 export const appRouter: RouteRecordRaw = {
   path: "/app",
@@ -29,6 +30,14 @@ export const appRouter: RouteRecordRaw = {
       path: "categories",
       name: "Categories",
       component: CategoriesView,
+      meta: {
+        requiresAuth: true,
+      },
+    },
+    {
+      path: "categories/details",
+      name: "Category Details",
+      component: CategoryDetails,
       meta: {
         requiresAuth: true,
       },
