@@ -5,5 +5,5 @@ export type FormInputType = {
   placeholder: string;
   label?: string;
   error?: string;
-  modelValue?: any;
+  shouldUpdate?: boolean;
 };

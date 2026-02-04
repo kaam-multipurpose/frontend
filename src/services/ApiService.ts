@@ -23,6 +23,7 @@ export class ApiService {
         }
 
         headers.set("Content-Type", "application/json");
+        headers.set("Accept", "application/json");
         return headers;
     }
 
@@ -54,34 +55,27 @@ export class ApiService {
     }
 
     private static async handleResponse<T>(response: Response): Promise<T> {
-        const responseBody = await response.text();
+        const responseBody = await response.json();
 
         if (!response.ok) {
-            let jsonError: any = { message: "Server error" };
-            try {
-               jsonError = JSON.parse(responseBody);
-            } catch {
-                jsonError.message = response.statusText;
-            }
-
             throw new ApiError(
-                jsonError.message || response.statusText,
+                responseBody?.message ?? response.statusText,
                 response.status,
-                jsonError
+                responseBody ?? {
+                    message: response.statusText,
+                }
             );
         }
 
-        let data: T;
-        try {
-            if (response.status === 204 || responseBody.length === 0) {
-                data = {} as T;
-            } else {
-                data = JSON.parse(responseBody) as T;
-            }
-            return {...data, statusCode: response.status} as T;
-        } catch (e: any) {
-            throw new Error("Invalid response format: " + e.message);
+        if (response.status === 204 || responseBody.length === 0) {
+            return { statusCode: response.status } as T & { statusCode: number };
         }
+
+        if (!responseBody) {
+            throw new ApiError("Invalid response format", response.status, { raw: responseBody });
+        }
+
+        return { ...responseBody, statusCode: response.status };
     }
 
     public static get<T>(endpoint: string, optionsAddon?: RequestInit): Promise<T> {

@@ -12,17 +12,14 @@ const {
   name,
   placeholder,
   error = null,
-  modelValue
 } = defineProps<FormInputType>();
 
+const currentValue = defineModel<any>();
 
 const inputClasses = computed(() => [
   'transition-colors duration-200',
   kind === 'password' ? 'pr-12' : '',
 ]);
-
-
-const emit = defineEmits(["update:modelValue"]);
 
 const convertType = computed<string>(() => {
   if (kind === 'password') {
@@ -42,7 +39,7 @@ const convertType = computed<string>(() => {
 
     <div class="relative w-full">
       <input :type="convertType" :name="name" :placeholder="placeholder"
-        class="input input-md lg:input-lg w-full" :class="inputClasses" :value="modelValue" />
+        class="input input-md lg:input-lg xl:input-xl w-full" :class="inputClasses" v-model="currentValue" />
 
       <div v-if="kind === 'password'" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 px-4">
         <ShowPasswordButton v-if="kind === 'password'" v-model:showPassword="showPassword" />
