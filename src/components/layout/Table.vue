@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import { ChevronUp, ChevronDown } from "lucide-vue-next";
 import { useRouter } from "vue-router";
 
-interface TableProps {
+type TableProps = {
     headers: string[];
     rows: Record<string, any>[];
     showIndex?: boolean;
