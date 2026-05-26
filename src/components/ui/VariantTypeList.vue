@@ -5,7 +5,7 @@ import type { VariantTypeItem } from '@/types/variant-type-response';
 import { VariantsTypeService } from '@/services/VariantsTypeService';
 import { toast } from 'vue-sonner';
 
-const { name, slug, id, values } = defineProps<VariantTypeItem>();
+const { name, slug, id, values, viewOnly = false } = defineProps<VariantTypeItem>();
 const emit = defineEmits<{ variantChanged: [] }>();
 const isOpen = ref(false);
 const addNewVariantTypeValue = ref(false)
@@ -81,7 +81,7 @@ const handlePlusCLick = () => {
 
 <template>
     <!-- Responsive card width: full on mobile, half on large screens when closed, full when open -->
-    <div class="relative group w-full" :class="{ 'lg:col-span-2': isOpen }">
+    <div class="relative group w-full" :class="{ 'lg:col-span-2': isOpen && !viewOnly }">
         <div class="relative collapse bg-base-100 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border border-base-300"
             :class="{ 'collapse-open': isOpen }">
 
@@ -106,7 +106,7 @@ const handlePlusCLick = () => {
                         </div>
                         <button
                             class="w-8 h-8 rounded-lg bg-red-100 opacity-0 group-hover:opacity-100 hover:bg-red-200 flex items-center justify-center transition cursor-pointer"
-                            @click.stop="deleteVariantModal?.showModal()">
+                            v-if="!viewOnly" @click.stop="deleteVariantModal?.showModal()">
                             <Trash2Icon class="w-4 h-4 text-red-600" />
                         </button>
                     </div>
@@ -123,7 +123,8 @@ const handlePlusCLick = () => {
                         <span class="text-sm font-medium text-base-content/80">
                             {{ value.name }}
                         </span>
-                        <div class="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                        <div v-if="!viewOnly"
+                            class="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
                             <button @click="" class="hover:text-primary">
                                 <Edit2Icon class="w-3.5 h-3.5" />
                             </button>
@@ -155,7 +156,7 @@ const handlePlusCLick = () => {
                         </div>
                     </div>
 
-                    <button @click="handlePlusCLick"
+                    <button @click="handlePlusCLick" v-if="!viewOnly"
                         class="w-10 h-10 rounded-lg cursor-pointer bg-primary/35 flex items-center justify-center transition-all duration-300 disabled:opacity-20 hover:bg-primary/50"
                         :disabled="isLoading">
                         <span v-if="isLoading" class="loading loading-bars loading-sm">
@@ -205,7 +206,7 @@ const handlePlusCLick = () => {
 
 .collapse-content {
     scrollbar-width: thin;
-    scrollbar-color: oklch(var(--p) / 0.3) transparent;
+    scrollbar-color: oklch(var(--color-primary) / 0.3) transparent;
 }
 
 .collapse-content::-webkit-scrollbar {

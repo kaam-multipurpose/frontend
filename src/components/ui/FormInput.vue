@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
-import {computed, ref} from 'vue';
-import type {FormInputType} from "@/types/form-input.ts";
+import { computed, ref } from 'vue';
+import type { FormInputType } from "@/types/form-input.ts";
 import ShowPasswordButton from "@/components/ui/ShowPasswordButton.vue";
 
 const showPassword = ref<boolean>(false);
@@ -38,17 +38,11 @@ const convertType = computed<string>(() => {
     </label>
 
     <div class="relative w-full">
-      <input
-          :type="convertType"
-          :name="name"
-          :placeholder="placeholder"
-          class="input input-md lg:input-lg xl:input-xl w-full"
-          :class="inputClasses"
-          v-model="currentValue"
-      />
+      <input :type="convertType" :name="name" :placeholder="placeholder"
+        class="input input-md lg:input-lg xl:input-xl w-full" :class="inputClasses" v-model="currentValue" />
 
       <div v-if="kind === 'password'" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 px-4">
-        <ShowPasswordButton v-if="kind === 'password'" v-model:showPassword="showPassword"/>
+        <ShowPasswordButton v-if="kind === 'password'" v-model:showPassword="showPassword" />
       </div>
     </div>
 
